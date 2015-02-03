@@ -1,0 +1,109 @@
+#!/bin/bash
+
+MAJOR="LVDS-1"
+MINOR="VGA-1"
+
+MAJOR="$2"
+MINOR="$3"
+
+echo -e "1: ${MAJOR}\n2: ${MINOR}"
+
+version=0.1
+
+license() {
+echo "Copyright (c) 2015, Tracerneo
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE."
+}
+
+version() {
+    echo "rescreen v$version"
+}
+
+usage() {
+    version
+    cat <<EOF
+
+Usage:
+${0##*/} [options]
+
+If [message] is not provided, reads the message from STDIN
+
+Options:
+  -v   Show version and exit
+  -h   Show this help and exit
+  -l   Show license.
+  -a   Set auto
+  -2   Set twoscreen
+  -f   Set FullHD display as primary
+  -l   Set FullHD display as primary on left
+EOF
+}
+
+autoscr() {
+xrandr --auto
+sleep 0.5
+xrandr --auto
+}
+
+autoscreen(){
+printf "\033[1m* Setting onescreen... "
+autoscr
+wacomset -1
+echo -e "[\033[32mOK\033[1;37m]\033[0m"
+}
+
+twoscreen() {
+printf "\033[1m* Setting twoscreen... "
+autoscr
+sleep 0.5
+xrandr --output ${MAJOR} --panning 1280x800+0+280 --output ${MINOR} --panning 1920x1080+1280+0 
+sleep 0.5
+xrandr --output ${MAJOR} --panning 1280x800+0+280 --output ${MINOR} --panning 1920x1080+1280+0 
+wacomset -2
+echo -e "[\033[32mOK\033[1;37m]\033[0m"
+}
+
+fullhd() {
+printf "\033[1m* Setting FullHD as primary... "
+autoscr
+sleep 0.5
+xrandr --screen 0 --size 3200x1080 --output ${MINOR} --primary --panning 1920x1080+1280+0 --auto --output ${MAJOR} --auto --left-of ${MINOR} --panning 1280x800+0+0 
+wacomset -2
+echo -e "[\033[32mOK\033[1;37m]\033[0m"
+}
+
+fullhdl() {
+printf "\033[1m* Setting twoscreen... "
+autoscr
+sleep 0.5
+xrandr --output ${MINOR} --panning 1920x1080+0+0 --output ${MAJOR} --panning 1280x800+1920+0 
+sleep 0.5
+xrandr --output ${MINOR} --panning 1920x1080+0+0 --output ${MAJOR} --panning 1280x800+1920+0 
+wacomset -2
+echo -e "[\033[32mOK\033[1;37m]\033[0m"
+}
+
+while getopts a2flhv OPT
+do
+    case ${OPT} in
+        v)  version; exit ;;
+        h)  usage; exit ;;
+        a)  autoscreen; exit ;;
+        2)  twoscreen; exit ;;
+        f)  fullhd; exit ;;
+        l)  fullhdl; exit ;;
+        \?) usage >&2; exit 1 ;;
+    esac
+done
+

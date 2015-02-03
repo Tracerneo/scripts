@@ -1,0 +1,4 @@
+#!/bin/bash
+qsize -msavf | \
+  awk '!/^ .+Totals/ { printf("%6d %2s %80s %8d files, %8d non-files\n", $6, $7, $1, $2, $4); }
+        /^ .+Totals/ { printf("%6d %2s %72s %8d files, %8d non-files\n", $6, $7, $1, $2, $4); }' | sort -h

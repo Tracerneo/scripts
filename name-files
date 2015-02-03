@@ -1,0 +1,9 @@
+#!/bin/bash
+#find -maxdepth 1 -type f -exec bash -c 'mv -- "{}" $(cksum "{}" | cut -d" " -f1 | base64 | sed "s./.-.g").$(echo "{}" | sed "s/^.*\.//")' \;
+#find -maxdepth 1 -type f -exec bash -c 'mv -- "{}" $(md5sum "{}" | cut -d" " -f1 | xxd -p -r | base64 | sed "s./.-.g").$(echo "{}" | sed "s/^.*\.//")' \;
+find -maxdepth 1 -type f -exec bash -c '
+  filepath="{}"
+  filename="${filepath##*/}"
+  extension=".${filename##*.}"
+  mv -- "${filepath}" \
+    $(md5sum "${filepath}" | cut -d" " -f1 | xxd -p -r | base64 | sed "s.+.-.g;s./._.g;s.=..g")${extension}' \;

@@ -1,0 +1,97 @@
+#!/bin/bash
+
+version=0.1
+
+license() {
+echo "Copyright (c) 2015, Tracerneo
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE."
+}
+
+version() {
+    echo "wacomset v$version"
+}
+
+usage() {
+    version
+    cat <<EOF
+
+Usage:
+${0##*/} [options]
+Script for setting Wacom tablet area and rotation.
+
+Options:
+  -v   Show version and exit
+  -h   Show this help and exit
+  -l   Show license.
+  -1   Set onescreen
+  -2   Set twoscreen  
+  -N   Rotate None
+  -H   Rotate Half
+EOF
+}
+
+WACOM_SIZE_X=1280
+WACOM_SIZE_Y=800
+
+WACOM_RES_X=26112
+WACOM_RES_Y=16320
+
+onescreen() {
+	SCREEN_SIZE_X=1280
+	SCREEN_SIZE_Y=800
+
+	SCREEN_RES_X=$(python -c "print(int( ${WACOM_RES_X} * (${WACOM_RES_X} / (${WACOM_RES_X} / ${SCREEN_SIZE_X}.0 * ${WACOM_SIZE_X})) ));")
+	SCREEN_RES_Y=$(python -c "print(int( ${WACOM_RES_Y} * (${WACOM_RES_Y} / (${WACOM_RES_Y} / ${SCREEN_SIZE_Y}.0 * ${WACOM_SIZE_Y})) ));")
+
+	xsetwacom --set 'Wacom ISDv4 E3 Pen stylus'   Area "0 0 ${SCREEN_RES_X} ${SCREEN_RES_Y}"
+	xsetwacom --set 'Wacom ISDv4 E3 Pen eraser'   Area "0 0 ${SCREEN_RES_X} ${SCREEN_RES_Y}"
+	xsetwacom --set 'Wacom ISDv4 E3 Finger touch' Area "0 0 $(python -c "print(int(${SCREEN_RES_X} / 10));") $(python -c "print(int(${SCREEN_RES_Y} / 10))")"
+}
+
+twoscreen() {
+	SCREEN_SIZE_X=3200
+	SCREEN_SIZE_Y=1080
+
+	SCREEN_RES_X=$(python -c "print(int( ${WACOM_RES_X} * (${WACOM_RES_X} / (${WACOM_RES_X} / ${SCREEN_SIZE_X}.0 * ${WACOM_SIZE_X})) ));")
+	SCREEN_RES_Y=$(python -c "print(int( ${WACOM_RES_Y} * (${WACOM_RES_Y} / (${WACOM_RES_Y} / ${SCREEN_SIZE_Y}.0 * ${WACOM_SIZE_Y})) ));")
+
+	xsetwacom --set 'Wacom ISDv4 E3 Pen stylus'   Area "0 0 ${SCREEN_RES_X} ${SCREEN_RES_Y}"
+	xsetwacom --set 'Wacom ISDv4 E3 Pen eraser'   Area "0 0 ${SCREEN_RES_X} ${SCREEN_RES_Y}"
+	xsetwacom --set 'Wacom ISDv4 E3 Finger touch' Area "0 0 $(python -c "print(int(${SCREEN_RES_X} / 10));") $(python -c "print(int(${SCREEN_RES_Y} / 10));")"
+}
+
+rotatenone() {
+	xsetwacom --set 'Wacom ISDv4 E3 Pen stylus'   Rotate none
+	xsetwacom --set 'Wacom ISDv4 E3 Finger touch' Rotate none
+}
+
+rotatehalf() {
+	xsetwacom --set 'Wacom ISDv4 E3 Pen stylus'   Rotate half
+	xsetwacom --set 'Wacom ISDv4 E3 Finger touch' Rotate half
+}
+
+while getopts 12NHlhv OPT
+do
+    case ${OPT} in
+        v)  version; exit ;;
+        h)  usage; exit ;;
+        l)  license; exit ;;
+        1)  onescreen ;;
+        2)  twoscreen ;;
+        N)  rotatenone ;;
+        H)  rotatehalf ;;
+        \?) usage >&2; exit 1 ;;
+    esac
+done
+

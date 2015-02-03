@@ -1,0 +1,82 @@
+#!/bin/bash
+# urxvt font changer
+
+# Modeline [[ - Vim settings
+#   vim: foldmarker=[[,]] foldmethod=marker foldlevel=0 filetype=sh
+# ]]
+
+#============== SETTINGS ==============#
+# Font settings
+FN_NORMAL='xft:Ubuntu Mono:pixelsize=12,xft:DejaVu Sans Mono,xft:Droid Sans Fallback,[codeset=JISX0208]xft:IPAGothic,xft:Kochi Gothix,xft:Lohit Kannada,xft:symbola,xft:Bitstream Cyberbit'
+FN_BIG='xft:Ubuntu Mono:pixelsize=16,xft:DejaVu Sans Mono,xft:Droid Sans Fallback,[codeset=JISX0208]xft:IPAGothic,xft:Kochi Gothix,xft:Lohit Kannada,xft:symbola,xft:Bitstream Cyberbit'
+FN_BIGGER='xft:Ubuntu Mono:pixelsize=20,xft:DejaVu Sans Mono,xft:Droid Sans Fallback,[codeset=JISX0208]xft:IPAGothic,xft:Kochi Gothix,xft:Lohit Kannada,xft:symbola,xft:Bitstream Cyberbit'
+
+# Default font
+FN_SET=$FN_NORMAL
+#============== SETTINGS ==============#
+
+# General [[ - version, license
+version=0.1
+
+license() {
+echo "Copyright (c) 2015, Tracerneo
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE."
+}
+
+version() {
+    echo "urxvt-font v$version"
+}
+# ]] 
+# Usage [[ 
+usage() {
+    version
+    cat <<EOF
+
+Usage:
+${0##*/} [options]
+
+Options:
+  -n          Set normal fonts (default)
+  -b          Set big    fonts
+  -B          Set bigger fonts
+  -f <font>   Set own fonts
+  -v          Show version and exit
+  -h          Show this help and exit
+  -l          Show license.
+EOF
+}
+# ]] 
+# Code [[ 
+
+# Set font
+set_font_size() {
+  printf '\33]50;%s\007' "$FN_SET"
+}
+
+# Parse option arguments, ":" after letter indicates argument (see 'help getopts')
+OPTS="nbBf:"
+while getopts ${OPTS}vhl OPT
+do
+  case ${OPT} in
+    n)  FN_SET=${FN_NORMAL};  set_font_size; exit ;;
+    b)  FN_SET=${FN_BIG};     set_font_size; exit ;;
+    B)  FN_SET=${FN_BIGGER};  set_font_size; exit ;;
+    f)  FN_SET=${OPTARG};     set_font_size; exit ;;
+    v)  version; exit ;;
+    h)  usage; exit ;;
+    l)  license; exit ;;
+    \?) set_font_size; exit ;;
+  esac
+done
+# ]]
