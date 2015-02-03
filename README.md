@@ -16,6 +16,8 @@ Chinese or Japanese in your terminal.
 ## Other scripts
 There are some one-liners, too.
 
-**qinstsize** displays all packages installed on your Gentoo system sorted by size (ascending) in a pretty way. Requires app-portage/portage-utils.
+**qinstsize** displays all packages installed on your Gentoo system sorted by
+size (ascending) in a pretty way. Requires app-portage/portage-utils.
 
-**name-files** changes names of files to their base64'd md5sums, keeping extension. Requires xxd command provided by vim-core.
+**name-files** changes names of files to their base64'd md5sums, keeping
+extension. Requires xxd command provided by vim-core.
