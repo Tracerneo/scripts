@@ -3,12 +3,12 @@ This script rotates display and Wacom touch inputs.
 
 ### auto-rotate
 This little scripts detects when HP tm2's lid is rotated and "closed" turning
-it into tablet. In such case, it automaticaly executes rotate-display. Works in
-a loop, start it in background. Could be done better, but I don't remember when
-I used it last time.
+it into a tablet. It automaticaly executes rotate-display. Works in a loop,
+should be started in the background. Could be done better, but I don't remember
+when I used it last time.
 
 ## wacom-display
-Simpliest of them all, this script simply binds Wacom tablet to different
+Simpliest of them all, this script simply binds the Wacom tablet to different
 display. It's that simple. I don't remember writing it though, so it's possible
 that my cat wrote it, since it's in Perl.
 
