@@ -1,0 +1,152 @@
+#!/bin/bash
+# Preinit
+brev="[1;7m"
+cnone="[0m"
+
+if [[ $@ == "" ]] ; then
+	opt="3" ;
+else 
+	opt=$@ ;
+fi
+
+#>············································································<#
+#>············································································<#
+# 1 Basic modes (0-9)
+#if [[ $opt == "1" || $opt == "3" || $opt == "5" || $opt == "7" || $opt == "9" || $opt == "11" || $opt == "13" || $opt == "15" || $opt == "17" || $opt == "19" || $opt == "21" || $opt == "23" || $opt == "25" || $opt == "27" || $opt == "29" || $opt == "31" ]] ; then
+# Header
+printf "${brev}   │"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "${brev} ${base}${color}│"
+	done ;
+done
+printf "$cnone"
+for premod in {0..9} ; do
+	printf "\n${brev} ${premod} ${cnone}│"
+	for color in {0..9} ; do
+		for base in {3..4} ; do
+			printf "[${premod};${base}${color}m ${base}${color}${cnone}│" ;
+		done ;
+	done ;
+done
+#fi
+
+#>············································································<#
+# 2 Basic inversed (0-9;7)
+#if [[ $opt == "2" || $opt == "3" || $opt == "7" || $opt == "9" || $opt == "11" || $opt == "13" || $opt == "15" || $opt == "17" || $opt == "19" || $opt == "21" || $opt == "23" || $opt == "25" || $opt == "27" || $opt == "29" || $opt == "31" ]] ; then
+printf "\n${brev}   │"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "${brev} ${base}${color}│"
+	done ;
+done
+for premod in {0..9} ; do
+printf "\n${brev}${premod};7${cnone}│"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "[${premod};7;${base}${color}m ${base}${color}${cnone}│" ;
+	done ;
+done ;
+done
+
+#>············································································<#
+# 4 Other modes (20-29)
+printf "\n${brev}   │"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "${brev} ${base}${color}│"
+	done ;
+done
+printf "[0m"
+for premod in {20..29} ; do
+printf "\n${brev} ${premod}${cnone}│"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "[${premod};${base}${color}m ${base}${color}${cnone}│" ;
+	done ;
+done ;
+done
+
+#>············································································<#
+# 8 Other modes (50-59)
+printf "\n${brev}   │"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "${brev} ${base}${color}│"
+	done ;
+done
+printf "[0m"
+for premod in {50..59} ; do
+printf "\n${brev} ${premod}${cnone}│"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "[${premod};${base}${color}m ${base}${color}${cnone}│" ;
+	done ;
+done ;
+done
+
+#>············································································<#
+#16 Other modes (60-64)
+printf "\n${brev}   │"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "${brev} ${base}${color}│"
+	done ;
+done
+printf "[0m"
+for premod in {60..64} ; do
+printf "\n${brev} ${premod}${cnone}│"
+for color in {0..9} ; do
+	for base in {3..4} ; do
+		printf "[${premod};${base}${color}m ${base}${color}${cnone}│" ;
+	done ;
+done ;
+done
+
+#>············································································<#
+#>············································································<#
+printf "${cnone}\n\n"
+for f in {232..255} ; do
+	printf "[38;5;${f};40m ${f} [39;49m";
+done
+printf "\n"
+for f in {232..255} ; do
+	printf "[38;5;${f};47m ${f} [39;49m";
+done
+printf "\n"
+for x in {232..255} ; do
+	printf " ${x} ";
+done
+printf "\n"
+for b in {232..255} ; do
+	printf "[30;48;5;${b}m ${b} [39;49m";
+done
+printf "\n"
+for b in {232..255} ; do
+	printf "[37;48;5;${b}m ${b} [39;49m";
+done
+
+#>············································································<#
+#>············································································<#
+printf "${cnone}\n"
+newl=0
+aspc=" "
+for col1 in {-2..231} ; do
+	newldiv=$(($newl % 6))
+	if [[ $newldiv == 0 ]] ; then
+		printf "\n│" ;
+	fi
+        if [[ $col1 -gt  -1 ]] ; then
+                aspc="  ";
+        fi
+        if [[ $col1 -gt  9 ]] ; then
+                aspc=" ";
+        fi
+	if [[ $col1 -gt 99 ]] ; then
+		aspc="" ;
+	fi
+	printf "[38;5;${col1}m ${aspc}${col1} [30;48;5;${col1}m ${aspc}${col1} [39;49m│";
+	
+	newl=$(($newl + 1)) ;
+done
+printf "\n"
