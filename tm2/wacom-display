@@ -13,10 +13,11 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-# its either LVDS or LVDS-1, so use the first display from xrandr
+use List::Util 'first';
+
 @xrandr = `xrandr`;
-$xrandr[1] =~ /(\w+)/;
-$DISPLAY = $1;
+# use the first connected display from xrandr
+($DISPLAY) = (first { /(\w+) connected/ } @xrandr) =~ /(\w+)/;
 system('xsetwacom --set "Wacom ISDv4 E3 Finger touch" MapToOutput "' . $DISPLAY . '"');
 system('xsetwacom --set "Wacom ISDv4 E3 Pen stylus" MapToOutput "' . $DISPLAY . '"');
 system('xsetwacom --set "Wacom ISDv4 E3 Pen eraser" MapToOutput "' . $DISPLAY . '"');
