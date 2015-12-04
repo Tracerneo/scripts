@@ -1,7 +1,7 @@
 #!/bin/bash
 # Preinit
-brev="[1;7m"
-cnone="[0m"
+brev="\033[1;7m"
+cnone="\033[0m"
 
 if [[ $@ == "" ]] ; then
 	opt="3" ;
